@@ -1,0 +1,24 @@
+CHIP Add16 {
+	IN a[16], b[16], cin;
+	OUT sum[16], cout;
+
+	PARTS:
+	Add(a[0], b[0], sum=sum[0], out=sum[0] carry=ca1);
+	Or(a=ca1, b=cin, out=carry1);
+	Add3Bits(a[1], b[1], c=carry1, sum=sum[1], carry=carry2);
+	Add3Bits(a[2], b[2], c=carry2, sum=sum[2], carry=carry3);
+	Add3Bits(a[3], b[3], c=carry3, sum=sum[3], carry=carry4);
+	Add3Bits(a[4], b[4], c=carry4, sum=sum[4], carry=carry5);
+	Add3Bits(a[5], b[5], c=carry5, sum=sum[5], carry=carry6);
+	Add3Bits(a[6], b[6], c=carry6, sum=sum[6], carry=carry7);
+	Add3Bits(a[7], b[7], c=carry7, sum=sum[7], carry=carry8);
+	Add3Bits(a[8], b[8], c=carry8, sum=sum[8], carry=carry9);
+	Add3Bits(a[9], b[9], c=carry9, sum=sum[9], carry=carry10);
+	Add3Bits(a[10], b[10], c=carry10, sum=sum[10], carry=carry11);
+	Add3Bits(a[11], b[11], c=carry11, sum=sum[11], carry=carry12);
+	Add3Bits(a[12], b[12], c=carry12, sum=sum[12], carry=carry13);
+	Add3Bits(a[13], b[13], c=carry13, sum=sum[13], carry=carry14);
+	Add3Bits(a[14], b[14], c=carry14, sum=sum[14], carry=carry15);
+	Add3Bits(a[15], b[15], c=carry15, sum=sum[15], carry=cout);
+
+}
