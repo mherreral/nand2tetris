@@ -1,0 +1,9 @@
+CHIP Add3Bits {
+	IN a, b, c;
+	OUT = sum, carry;
+
+	PARTS:
+	Add(a=a, b=b, sum=sumab, carry=carryab);
+	Add(a=c, b=sumab, sum=sum, carry=carryabc);
+	Or(a=carryab, b=carryabc, carry=carry);
+}
