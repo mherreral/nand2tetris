@@ -4,4 +4,4 @@ CHIP Not {
 
     PARTS:
     Nand(a=in, b=true, out=out);
-}
+}//

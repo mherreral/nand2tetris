@@ -7,3 +7,4 @@ CHIP Add3Bits {
 	Add(a=c, b=sumab, sum=sum, carry=carryabc);
 	Or(a=carryab, b=carryabc, carry=carry);
 }
+//

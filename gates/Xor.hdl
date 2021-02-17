@@ -19,3 +19,4 @@ CHIP Xor {
 	Or(a=nota, b=notb, out=notor);
 	And(a=same, b=notor, out=out);
 }
+//
