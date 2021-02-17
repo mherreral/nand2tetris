@@ -5,37 +5,37 @@ CHIP ALU {
 	OUT out[16], zr, ng;
 
 	PARTS:
-		// if zx
-		Mux16(a=x, b=false, sel=zx, out=ozx);
+	// if zx
+	Mux16(a=x, b=false, sel=zx, out=ozx);
+
+	// if nx
+	Not16(in=mux0, out=notx);
+	Mux16(a=ozx, b=notx, sel=nx, out=onx);
+	
+	// if zy
+	Mux16(a=y, b=false, sel=zy, out=ozy);
+	
+	// if ny
+	Not16(in=ozy, out=noty);
+	Mux16(a=ozy, b=noty, sel=ny, out=ony);
 		
-		// if nx
-		Not16(in=mux0, out=notx);
-		Mux16(a=ozx, b=notx, sel=nx, out=onx);
+	// if func
+	Add16(a=onx, b=ony, sum=sumxy, carry=carry);
+	And16(a=onx, b=ony, out=andxy);
+	Mux16(a=andxy, b=sumxy, sel=fun, out=fout);
 		
-		// if zy
-		Mux16(a=y, b=false, sel=zy, out=ozy);
-		
-		// if ny
-		Not16(in=ozy, out=noty);
-		Mux16(a=ozy, b=noty, sel=ny, out=ony);
-		
-		// if func
-		Add16(a=onx, b=ony, sum=sumxy, carry=carry);
-		And16(a=onx, b=ony, out=andxy);
-		Mux16(a=andxy, b=sumxy, sel=fun, out=fout);
-		
-		// if no
-		Not16(in=fout, out=nfout);
-		Mux16(a=fout, b=nfout, sel=no, out=nout);
-		
-		// if not out
-		Or16Way(in=nout, out=outor);
-		Not(in=outor, out=zr);
-		
-		// if negative out
-		And16(a=true, b=nout, out[15]=ng, out[0..14]=bye);
-		
-		// output
-		Or16(a=nout, b=false, out=out);
+	// if no
+	Not16(in=fout, out=nfout);
+	Mux16(a=fout, b=nfout, sel=no, out=nout);
+	
+	// if not out
+	Or16Way(in=nout, out=outor);
+	Not(in=outor, out=zr);
+	
+	// if negative out
+	And16(a=true, b=nout, out[15]=ng, out[0..14]=bye);
+	
+	// output
+	Or16(a=nout, b=false, out=out);
 
 }
