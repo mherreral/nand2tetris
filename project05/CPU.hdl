@@ -46,44 +46,45 @@ CHIP CPU {
 	BUILTIN Or;*/
 
     PARTS:
-// A register
-Mux16(a=instruction, b=ALUout, sel=instruction[15], out=inA);
-
-//  1 if A-instruction, 0 if C-instruction
-Not(in=instruction[15], out=inst);
-
-// load or not to register, it is loaded always if it is an A-inst or d1 is 1
-Or(a=inst, b=instruction[5], out=loadA);
-ARegister(in=inA, load=loadA, out=outA, out[0..14]=AdressM);
-
-
-// D register
-And(a=instruction[4], b=instruction[15], out=loadD);
-DRegister(in=outA, load=loadD, out=outD);
-
-
-// ALU mux
-Mux16(a=outA, b=inM, sel=instruction[12], out=inALU);
-
-// ALU
-ALU(x=outD, y=inALU, zx=instruction[11], nx=instruction[10], zy=instruction[9],
-ny=instruction[8], f=instruction[7], no=instruction[6], zr=zr, ng=ng, out=ALUout, out=MEMout);
-
-// ALUout > 0 or ALUout < 0
-Not(in=zr, out=notzr);
-Not(in=ng, out=notng);
-And(a=notzr, b=notng, out=ispos);
-
-// jump
-And(a=instruction[2], b=ng, out=jumpneg); // if it's less than zero
-And(a=instruction[1], b=zr, out=jumpeq); // if it's equal to zero
-And(a=instruction[0], b=ispos, out=jumppos); // if it's greater than zero
-
-Or(a=jumpneg, b=jumpeq, out=jump);
-Or(a=jump, b=jumppos, out=jjump);
-
-And(a=jjump, b=instruction[15], out=pc);
-
-PC(in=outA, load=pc, inc=true, reset=reset, out[0..14]=pc);
-
-And(a=instruction[15], b=instruction[3], out=writeM);
+	// A register
+	Mux16(a=instruction, b=ALUout, sel=instruction[15], out=inA);
+	
+	//  1 if A-instruction, 0 if C-instruction
+	Not(in=instruction[15], out=inst);
+	
+	// load or not to register, it is loaded always if it is an A-inst or d1 is 1
+	Or(a=inst, b=instruction[5], out=loadA);
+	ARegister(in=inA, load=loadA, out=outA, out[0..14]=AdressM);
+	
+	
+	// D register
+	And(a=instruction[4], b=instruction[15], out=loadD);
+	DRegister(in=outA, load=loadD, out=outD);
+	
+	
+	// ALU mux
+	Mux16(a=outA, b=inM, sel=instruction[12], out=inALU);
+	
+	// ALU
+	ALU(x=outD, y=inALU, zx=instruction[11], nx=instruction[10], zy=instruction[9],
+	ny=instruction[8], f=instruction[7], no=instruction[6], zr=zr, ng=ng, out=ALUout, out=MEMout);
+	
+	// ALUout > 0 or ALUout < 0
+	Not(in=zr, out=notzr);
+	Not(in=ng, out=notng);
+	And(a=notzr, b=notng, out=ispos);
+	
+	// jump
+	And(a=instruction[2], b=ng, out=jumpneg); // if it's less than zero
+	And(a=instruction[1], b=zr, out=jumpeq); // if it's equal to zero
+	And(a=instruction[0], b=ispos, out=jumppos); // if it's greater than zero
+	
+	Or(a=jumpneg, b=jumpeq, out=jump);
+	Or(a=jump, b=jumppos, out=jjump);
+	
+	And(a=jjump, b=instruction[15], out=loadpc);
+	
+	PC(in=outA, load=loadpc, inc=true, reset=reset, out[0..14]=pc);
+	
+	And(a=instruction[15], b=instruction[3], out=writeM);
+}
